@@ -3,25 +3,27 @@ const fs = require('fs');
 const ec = (element, options) => {
 	let elements;
 
+	console.log( options );
 	try {
 		elements = JSON.parse(
 			fs.readFileSync('elements.json', 'utf-8')
 		);
 	} catch (error) {
 		console.error(error);
+		return JSON.stringify({error:"Error occured reading elements.json."} );
 	}
 	let els, e;
-	if (!element) return {error:"Expecting: C or oxygen or 23"};
+	if (!element) return JSON.stringify({error:"Expecting: C or oxygen or 23"});
 	if (isNaN(element)) {
 		e = elements.find((a) => {
 			return a.name.toLowerCase() == element.toLowerCase() ||
 				a.symbol.toLowerCase() == element.toLowerCase();
 		});
-		if (!e) return {error:"element not found"};
+		if (!e) return JSON.stringify({error:"element not found"});
 		els = e.number;
 	} else {
 		e = elements.find((a) => a.number === parseInt(element));
-		if (!e) return {error:"element not found"};
+		if (!e) return JSON.stringify({error:"element not found"});
 		els = element;
 	}
 	let pat = [
@@ -55,7 +57,7 @@ const ec = (element, options) => {
 		}
 	});
 	let result;
-	if (options == '-v') {
+	if (options ==  '-v') {
 		e["configuration"] = config.sort((a, b) => a.charCodeAt(0) - b.charCodeAt(0)).join(" ");
 		// spread the whole element entry and return that with the configuration string added.
 		result = JSON.stringify({ ...e });

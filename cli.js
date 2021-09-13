@@ -7,5 +7,5 @@ const ec = require("./index");
 	const args = process.argv;
 
 	// Execute the function.
-	console.log(ec.ec(args[2], args[3]));
+	console.log(ec.ec(args[2], [...args]));
 })()
