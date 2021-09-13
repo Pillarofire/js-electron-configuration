@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/Pillarofire/js-electron-configuration/issues"
   },
+	"bin": {
+		"electron-config": "./cli.js"
+	},
   "homepage": "https://github.com/Pillarofire/js-electron-configuration#readme"
 }

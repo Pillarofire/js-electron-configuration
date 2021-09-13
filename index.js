@@ -66,12 +66,6 @@ const ec = (element, options) => {
 	return result;
 }
 
+exports.ec = ec;
 
-(() => {
-	// get aruments
-	const args = process.argv;
-
-	// Execute the function.
-	console.log(ec(args[2], args[3]));
-})()
 
