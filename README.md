@@ -1,6 +1,6 @@
 Usage:
 
-$ node index.js [Element Name | Element Symbol | Element Number] [-v]
+$ electron-config 'Element Name'|'Element Symbol'|'Element Number' [-v]
 
 Options: 
 
@@ -10,4 +10,3 @@ returns JSON including the object of the configuration string in standard notati
 
 Improvements not implemented:
 	- Pauli Exclusion Principle and electron spins.
-	- 
