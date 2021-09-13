@@ -1,0 +1,24 @@
+{
+  "name": "js-electron-configuration",
+  "version": "1.0.0",
+  "description": "returns information about an element in JSON including calculating the electron-configuration.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pillarofire/js-electron-configuration.git"
+  },
+  "keywords": [
+    "electron-configuration",
+    "elements",
+    "element-charge"
+  ],
+  "author": "Pillarofire",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Pillarofire/js-electron-configuration/issues"
+  },
+  "homepage": "https://github.com/Pillarofire/js-electron-configuration#readme"
+}
