@@ -58,9 +58,9 @@ const ec = (element, options) => {
 	if (options == '-v') {
 		e["configuration"] = config.sort((a, b) => a.charCodeAt(0) - b.charCodeAt(0)).join(" ");
 		// spread the whole element entry and return that with the configuration string added.
-		result = { ...e }
+		result = JSON.stringify({ ...e });
 	} else {
-		result = { "configuration": config.sort((a, b) => a.charCodeAt(0) - b.charCodeAt(0)).join(" ") }
+		result = JSON.stringify({ "configuration": config.sort((a, b) => a.charCodeAt(0) - b.charCodeAt(0)).join(" ") });
 	}
 
 	return result;
