@@ -2,27 +2,36 @@ const fs = require('fs');
 
 const ec = (element, options) => {
 	let elements;
-
+	let textOnly = options.includes('-t') && !options.includes('-v');
 	try {
 		elements = JSON.parse(
 			fs.readFileSync('elements.json', 'utf-8')
 		);
 	} catch (error) {
 		console.error(error);
-		return JSON.stringify({error:"Error occured reading elements.json."} );
+		return textOnly?
+			"Error occured reading elements.json":JSON.stringify(
+			{error:"Error occured reading elements.json"}
+		);
 	}
 	let electronsRemaining, foundElement;
-	if (!element) return JSON.stringify({error:"Expecting: C or oxygen or 23"});
+	if (!element) return textOnly?
+		"Expecting: C or oxygen or 23":
+		JSON.stringify({error:"Expecting: C or oxygen or 23"});
 	if (isNaN(element)) {
 		foundElement = elements.find((a) => {
 			return a.name.toLowerCase() == element.toLowerCase() ||
 				a.symbol.toLowerCase() == element.toLowerCase();
 		});
-		if (!foundElement) return JSON.stringify({error:"element not found"});
+		if (!foundElement) return textOnly?
+			"element not found":
+			JSON.stringify({error:"element not found"});
 		electronsRemaining = foundElement.number;
 	} else {
 		foundElement = elements.find((a) => a.number === parseInt(element));
-		if (!foundElement) return JSON.stringify({error:"element not found"});
+		if (!foundElement) return textOnly?
+			"element not found":
+			JSON.stringify({error:"element not found"});
 		electronsRemaining = element;
 	}
 	const pattern = [
