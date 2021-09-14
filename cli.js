@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const ec = require("./index");
+const electronConfuguraton = require("./index");
 
 (() => {
 	// get aruments
@@ -9,5 +9,5 @@ const ec = require("./index");
 	const options = [...args];
 	options.splice(0,3);
 	// Execute the function.
-	console.log( ec.ec( element, options ));
+	console.log( electronConfuguraton.ec( element, options ));
 })()
