@@ -3,7 +3,6 @@ const fs = require('fs');
 const ec = (element, options) => {
 	let elements;
 
-	console.log( options );
 	try {
 		elements = JSON.parse(
 			fs.readFileSync('elements.json', 'utf-8')
@@ -12,21 +11,21 @@ const ec = (element, options) => {
 		console.error(error);
 		return JSON.stringify({error:"Error occured reading elements.json."} );
 	}
-	let els, e;
+	let electronsRemaining, foundElement;
 	if (!element) return JSON.stringify({error:"Expecting: C or oxygen or 23"});
 	if (isNaN(element)) {
-		e = elements.find((a) => {
+		foundElement = elements.find((a) => {
 			return a.name.toLowerCase() == element.toLowerCase() ||
 				a.symbol.toLowerCase() == element.toLowerCase();
 		});
-		if (!e) return JSON.stringify({error:"element not found"});
-		els = e.number;
+		if (!foundElement) return JSON.stringify({error:"element not found"});
+		electronsRemaining = foundElement.number;
 	} else {
-		e = elements.find((a) => a.number === parseInt(element));
-		if (!e) return JSON.stringify({error:"element not found"});
-		els = element;
+		foundElement = elements.find((a) => a.number === parseInt(element));
+		if (!foundElement) return JSON.stringify({error:"element not found"});
+		electronsRemaining = element;
 	}
-	let pat = [
+	const pattern = [
 		{ '1s': 2 },
 		{ '2s': 2 },
 		{ '2p': 6 }, { '3s': 2 },
@@ -42,27 +41,36 @@ const ec = (element, options) => {
 		{ '7i': 26 }
 	];
 
-	let config = [];
-	pat.forEach((c, i) => {
-		let p = Object.keys(c)[0];
-		if (els > c[p]) {
-			config.push(p + '' + c[p]);
-			els -= c[p];
-		} else if (els > 0) {
+	const config = [];
+	// For each element in the pattern
+	pattern.forEach((shell, i) => {
+		// get the name of the key on that element, (i.e. 3p)
+		const shellDesignator = Object.keys(shell)[0];
+		if (electronsRemaining > shell[shellDesignator]) {
+			// if there are electrons left to assign, put that many there.
+			config.push(shellDesignator + '' + shell[shellDesignator]);
+			// decrement els by the number associated with the shell
+			electronsRemaining -= shell[shellDesignator];
+		} else if (electronsRemaining > 0) {
 			let ee = "";
-			for (i = 0; i < c[p] - els; i++) { ee += '+'; }
-			config.push(p + '' + els);
-			e["positive_charge"] = c[p] - els;
-			els = 0;
+			for (i = 0; i < shell[shellDesignator] - electronsRemaining; i++) { ee += '+'; }
+			config.push(shellDesignator + '' + electronsRemaining);
+			foundElement["positive_charge"] = shell[shellDesignator] - electronsRemaining;
+			electronsRemaining = 0;
 		}
 	});
 	let result;
-	if (options ==  '-v') {
-		e["configuration"] = config.sort((a, b) => a.charCodeAt(0) - b.charCodeAt(0)).join(" ");
+	const configStr = config.sort((a, b) => a.charCodeAt(0) - b.charCodeAt(0)).join(" ");
+	if (options.includes('-v')) {
+		foundElement["configuration"] = configStr;
 		// spread the whole element entry and return that with the configuration string added.
-		result = JSON.stringify({ ...e });
-	} else {
-		result = JSON.stringify({ "configuration": config.sort((a, b) => a.charCodeAt(0) - b.charCodeAt(0)).join(" ") });
+		result = JSON.stringify({ ...foundElement });
+	} else {		
+		if( options.includes('-t')){
+			result = configStr;
+		} else {
+			result = JSON.stringify({ "configuration": configStr });
+		}
 	}
 
 	return result;
